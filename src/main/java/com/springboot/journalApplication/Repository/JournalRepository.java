@@ -1,0 +1,11 @@
+package com.springboot.journalApplication.Repository;
+
+import com.springboot.journalApplication.Entity.JournalEntry;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface JournalRepository extends MongoRepository<JournalEntry, String> {
+
+
+}
