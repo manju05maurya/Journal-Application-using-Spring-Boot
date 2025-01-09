@@ -1,6 +1,7 @@
 package com.springboot.journalApplication.Controller;
 
 import com.springboot.journalApplication.Entity.JournalEntry;
+import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Map;
 @RequestMapping("/journal") //add mapping to class so every mapping path will be start using /journal/others
 public class EntryController {
 
-    private Map<Long, JournalEntry> journalEntries=new HashMap<>(); //we are not connecting to DB now so consider it as a table for now
+    private Map<ObjectId, JournalEntry> journalEntries=new HashMap<>(); //we are not connecting to DB now so consider it as a table for now
 
     @GetMapping
     public List<JournalEntry> getAll(){
@@ -26,13 +27,13 @@ public class EntryController {
     }
 
     @DeleteMapping("/id/{id}")
-    public long deleteEntry(@PathVariable long id){
+    public ObjectId  deleteEntry(@PathVariable ObjectId id){
         journalEntries.remove(id);
         return id;
     }
 
     @PutMapping("/id/{id}")
-    public JournalEntry updateEntry(@PathVariable long id, @RequestBody JournalEntry entry){
+    public JournalEntry updateEntry(@PathVariable ObjectId id, @RequestBody JournalEntry entry){
         journalEntries.put(id,entry);
         return journalEntries.get(id);
     }
