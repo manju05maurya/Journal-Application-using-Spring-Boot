@@ -23,15 +23,15 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/id/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable ObjectId id){
-        User user = userService.getUserById(id);
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getUserById(@PathVariable String username){
+        User user = userService.getUserByName(username);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user){
-        userService.addUser(user);
+        userService.saveUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

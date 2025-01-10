@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/journal") //add mapping to class so every mapping path will be start using /journal/others
-public class EntryController {
+public class EntryControllerWithMapCollection {
 
     private Map<ObjectId, JournalEntry> journalEntries=new HashMap<>(); //we are not connecting to DB now so consider it as a table for now
 

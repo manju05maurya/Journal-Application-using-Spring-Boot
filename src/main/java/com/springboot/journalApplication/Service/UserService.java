@@ -19,11 +19,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(ObjectId id){
-        return userRepository.findById(id).get();
+    public User getUserByName(String username){
+        return userRepository.findByUsername(username);
     }
 
-    public User addUser(User user){
+    public User saveUser(User user){
         return userRepository.save(user);
     }
 

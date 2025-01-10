@@ -1,7 +1,10 @@
 package com.springboot.journalApplication.Controller;
 
 import com.springboot.journalApplication.Entity.JournalEntry;
+import com.springboot.journalApplication.Entity.User;
+import com.springboot.journalApplication.Repository.UserRepository;
 import com.springboot.journalApplication.Service.JournalService;
+import com.springboot.journalApplication.Service.UserService;
 import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +23,16 @@ public class JournalEntryController {
     @Autowired
     private JournalService journalService;
 
-
     @GetMapping
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAllJournal(){
+        List<JournalEntry> allEntries = journalService.getAllJournal();
+        return new ResponseEntity<>(allEntries, HttpStatus.OK);
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<?> getAllJournalByUsername(@PathVariable String username){
         try {
-            List<JournalEntry> allEntries= journalService.getAllJournal();
+            List<JournalEntry> allEntries = journalService.getAllJournalByUsername(username);
             return new ResponseEntity<>(allEntries, HttpStatus.OK);
         }
         catch (Exception e){
@@ -32,7 +40,6 @@ public class JournalEntryController {
         }
     }
 
-//    ResponseEntity<?>
     @GetMapping("/id/{id}")
     public ResponseEntity<JournalEntry> getJournalById(@PathVariable ObjectId id){
 //        return journalService.getJournalById(id).get();
@@ -44,39 +51,47 @@ public class JournalEntryController {
         }
     }
 
-//    @GetMapping("/{title}")
-//    public JournalEntry getJournalByTitle(@PathVariable String title){
-//        return journalService.getJournalByTitle(title);
-//    }
-
-
-    @PostMapping
-    public ResponseEntity<JournalEntry> createEntry(@NotNull @RequestBody JournalEntry entry){
-        entry.setDate(LocalDateTime.now());
-        journalService.addJournal(entry);
-        return new ResponseEntity<>(entry, HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<ObjectId>  deleteEntry(@PathVariable ObjectId id){
+    @PostMapping("/{username}")
+    public ResponseEntity<JournalEntry> createEntry(@NotNull @RequestBody JournalEntry entry, @PathVariable String username){
         try {
-            ObjectId oId= journalService.deleteJournal(id);
-            return new ResponseEntity<>(oId, HttpStatus.NO_CONTENT);
-        }
-        catch (Exception e){
+            journalService.addJournal(entry, username);
+            return new ResponseEntity<>(entry, HttpStatus.CREATED);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/id/{id}")
-    public ResponseEntity<JournalEntry> updateEntry(@PathVariable ObjectId id, @RequestBody JournalEntry entry){
+    @DeleteMapping("/id/{id}/{username}")
+    public ResponseEntity<ObjectId>  deleteEntry(@PathVariable ObjectId id,@PathVariable String username){
+        try {
+            ObjectId oId= journalService.deleteJournal(id, username);
+            return new ResponseEntity<>(oId, HttpStatus.NO_CONTENT);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
+    @PutMapping("/{id}/{username}")
+    public ResponseEntity<JournalEntry> updateEntry(
+            @PathVariable ObjectId id,
+            @RequestBody JournalEntry entry,
+            @PathVariable String username){
            try{
-               JournalEntry newEntry= journalService.updateJournal(id,entry);
+               System.out.println("try block");
+               JournalEntry newEntry= journalService.updateJournal(id,entry,username);
                return new ResponseEntity<>(newEntry,HttpStatus.CREATED);
            }
            catch (Exception e){
+               System.out.println("catch block");
                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
            }
     }
 
 }
+
+//    @GetMapping("/{title}")
+//    public JournalEntry getJournalByTitle(@PathVariable String title){
+//        return journalService.getJournalByTitle(title);
+//    }
