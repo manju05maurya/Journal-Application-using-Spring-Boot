@@ -25,4 +25,5 @@ public class User {
     private String password;
     @DBRef  //user collection will contain a reference of JournalEntry(like foreign key), it will create a link bw two collections.
     private List<JournalEntry> journalEntries =  new ArrayList<>();
+    private List<String> roles;
 }

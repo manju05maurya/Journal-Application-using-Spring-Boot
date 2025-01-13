@@ -29,22 +29,17 @@ public class UserController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        userService.saveUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 
-    @DeleteMapping("/{username}")
-    public ResponseEntity<User> deleteUser(@PathVariable String username){
-        userService.deleteUser(username);
+    @DeleteMapping
+    public ResponseEntity<User> deleteUser(){
+        userService.deleteUser();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{username}")
-    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user){
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User user){
         userService.updateUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
